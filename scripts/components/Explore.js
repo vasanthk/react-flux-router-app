@@ -2,7 +2,7 @@ import React, { Component, PropTypes, findDOMNode } from 'react';
 import shouldPureComponentupdate from 'react-pure-render/function';
 
 const DEFAULT_LOGIN = 'vasanthk';
-const GITHUB_REPO = 'https://github.com/vasanthk/Browser-Rendering-Optimization';
+const GITHUB_REPO = 'https://github.com/vasanthk/react-flux-router-app';
 
 function parseFullName(params) {
   if (!params.login) {
