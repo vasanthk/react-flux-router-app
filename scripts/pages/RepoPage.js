@@ -48,7 +48,7 @@ function getState(props) {
 
 // The comment below is a JavaScript decorator
 // TODO: Checkout more info on JavaScript decorators
-// @connectToStores([RepoStore, StargazersByRepoStore, UserStore], getState)
+@connectToStores([RepoStore, StargazersByRepoStore, UserStore], getState)
 export default class RepoPage {
   static propTypes = {
     // Injected by React Router:
