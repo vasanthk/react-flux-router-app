@@ -1,11 +1,23 @@
-var React = require('react');
+import React, { PropTypes } from 'react';
+import Explore from './components/Explore';
+import DocumentTitle from 'react-document-title';
+import { RouteHandler } from 'react-router';
 
-var App = React.createClass({
+export default class App {
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired
+  };
+
   render() {
     return (
-      <h1>Hello, World</h1>
+      <DocumentTitle title='Sample App'>
+        <div className='App'>
+          <Explore {...this.props} />
+          <hr />
+          <RouteHandler {...this.props} />
+        </div>
+      </DocumentTitle>
     );
   }
-});
-
-module.exports = App;
+}
