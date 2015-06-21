@@ -131,7 +131,7 @@ export default class RepoPage {
     );
   }
 
-  handleLoadMoreClick() {Repo Page
+  handleLoadMoreClick() {
     const fullName = parseFullName(this.props.params);
     UserActionCreators.requestStargazerPage(fullName);
   }
