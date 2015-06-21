@@ -49,8 +49,9 @@ export function dispatchAsync(promise, types, action = {}) {
   const { request, success, failure } = types;
 
   dispatch(request, action);
+  // TODO: Chekc up on this ES6 syntax
   promise.then(
-      response => dispatch(success, {...action, response}),
-      error => dispatch(failure, {...action, error})
+      response => dispatch(success, { ...action, response }),
+      error => dispatch(failure, { ...action, error })
   );
 }
