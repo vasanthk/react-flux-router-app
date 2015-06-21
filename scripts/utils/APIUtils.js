@@ -43,6 +43,8 @@ function fetchAndNormalize(url, schema) {
     url = API_ROOT + url;
   }
 
+  // whatwg-fetch: The Fetch API provides an interface for fetching resources (e.g., across the network.)
+  // It will seem familiar to anyone who has used XMLHttpRequest, but the new API provides a more powerful and flexible feature set.
   return fetch(url).then(response =>
       response.json().then(json => {
         const camelizedJson = camelizeKeys(json);
