@@ -1,50 +1,60 @@
-'use strict';
+import { each, isFunction } from 'underscore';
+import { EventEmitter } from 'events';
+import shallowEqual from 'react-pure-render/shallowEqual';
 
-var EventEmitter = require('events').EventEmitter,
-  merge = require('react/lib/merge'),
-  shallowEqual = require('react/lib/shallowEqual');
+const CHANGE_EVENT = 'change';
 
-var CHANGE_EVENT = 'change';
+export function createStore(spec) {
+  const emitter = new EventEmitter();
+  emitter.setMaxListeners(0);
 
-var StoreUtils = {
-  createStore(spec) {
-    var store = merge(EventEmitter.prototype, merge(spec, {
-      emitChange() {
-        this.emit(CHANGE_EVENT);
-      },
+  const store = Object.assign({
+    emitChange() {
+      emitter.emit(CHANGE_EVENT);
+    },
 
-      addChangeListener(callback) {
-        this.on(CHANGE_EVENT, callback);
-      },
+    addChangeListener(callback) {
+      emitter.on(CHANGE_EVENT, callback);
+    },
 
-      removeChangeListener(callback) {
-        this.removeListener(CHANGE_EVENT, callback);
-      }
-    }));
+    removeChangeListener(callback) {
+      emitter.removeListener(CHANGE_EVENT, callback);
+    }
+  }, spec);
 
-    // Mute the warning because Stores will have a lot of subscribers
-    store.setMaxListeners(0);
+  // Auto-bind store methods for convenience
+  each(store, (val, key) => {
+    if (isFunction(val)) {
+      store[key] = store[key].bind(store);
+    }
+  });
 
-    return store;
-  },
+  return store;
+}
 
-  mergeIntoEntityBag(bag, entities, transform) {
-    if (!transform) {
-      transform = (x) => x;
+export function isInBag(bag, id, fields) {
+  let item = bag[id];
+  if (!bag[id]) {
+    return false;
+  }
+
+  if (fields) {
+    return fields.every(field => item.hasOwnProperty(field));
+  } else {
+    return true;
+  }
+}
+
+export function mergeIntoBag(bag, entities) {
+  for (let id in entities) {
+    if (!entities.hasOwnProperty(id)) {
+      continue;
     }
 
-    for (var key in entities) {
-      if (!entities.hasOwnProperty(key)) {
-        continue;
-      }
-
-      if (!bag.hasOwnProperty(key)) {
-        bag[key] = transform(entities[key]);
-      } else if (!shallowEqual(bag[key], entities[key])) {
-        bag[key] = transform(merge(bag[key], entities[key]));
-      }
+    if (!bag.hasOwnProperty(id)) {
+      bag[id] = entities[id];
+    } else if (!shallowEqual(bag[id], entities[id])) {
+      bag[id] = Object.assign({}, bag[id], entities[id]);
     }
   }
-};
-
-module.exports = StoreUtils;
+}
