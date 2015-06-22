@@ -1,2 +1,3 @@
-# react-flux-router-app
-Sample React-Flux app.. More details coming soon
+# React Flux Router App
+
+It uses open Github API to display starred repos by users and stargazers by repo.
